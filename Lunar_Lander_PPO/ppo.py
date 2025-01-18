@@ -49,6 +49,9 @@ def parse_args():
                         type=str,
                         default=None,
                         help='the entity (team) name that this experiment belongs to')
+    parser.add_argument('--capture-video', type=lambda x: bool(strtobool(x)), default=False, nargs='?', const=True, help="whether to capture videos of the agent's performances (check out 'video' folder)")
+    parser.add_argument('--num-envs', type=int, default=4,
+                        help='the number of parallel game environments')
     args = parser.parse_args()
     return args
 
@@ -96,30 +99,28 @@ if __name__ == "__main__":
 
     ##ppo deals with vector env , which stacks multiple independent env 
 
- 
-
-    def make_env(gym_id):
+    def make_env(gym_id, seed, idx, capture_video, run_name):
         def thunk():
             env = gym.make(gym_id)
             env = gym.wrappers.RecordEpisodeStatistics(env)
-            env = gym.wrappers.RecordVideo(
-    env,
-    video_folder="videos",
-    episode_trigger=lambda episode_id: episode_id % 100 == 0,
-    name_prefix="cartpole"
-)
+            if capture_video:
+                if idx==0:
+                    env= gym.wrappers.RecordVideo(env,
+                    f"videos/{run_name}", record_video_trigger=lambda x: x%100 == 0)
+                    env.seed(seed)
+                    env.action_space.seed(seed)
+                    env.observation_space.seed(seed)
             return env
         return thunk
-    
-    envs = gym.vector.SyncVectorEnv([make_env(args.gym_id)])
 
-##ppo deals wth the vector environments rather than gym enviroments , to use vector env
 
-    observation = envs.reset()
-    for _ in range(200):
-        action = envs.action_space.sample()
-        observation, reward, done, info = envs.step(action)
-        for item in info:
-            if "episode" in item.keys():
-                print(f"episodic return: {item['episode']['r']}")
-     
+
+
+    ##env setup
+    envs= gym.vector.SyncVectorEnv(
+        [make_env(args.gym_id, args.seed+i,i, args.capture_video, run_name)
+        for i in range(args.num_envs)]
+    ) ##tunning the n creating functions 
+    assert isinstance(envs.single_action_space, gym.spaces.Discrete), "Only discrete action space is supported"
+    print("envs.single_action_space", envs.single_action_space.n)
+    print("envs.single_observation_space", envs.single_observation_space.shape)
