@@ -10,6 +10,43 @@ import subprocess
 import gym 
 import pygame
 from pygame.locals import *
+
+import torch.nn as nn
+import torch.optim as optim
+from torch.distributions.categorical import Categorical
+
+
+##Agent Setup step-0.1
+class Agent(nn.Module):
+    def __init__(self, envs):
+        super(Agent, self).__init__()
+        ## we are creating a critic network that takes the state as input and outputs a value
+        ##3 linear layers and hyperbolic tangent activation function, uses sqrt 2 as std and output uses std=1.0
+        self.critic=nn.Sequential(
+            layer_init(nn.Linear(np.array(envs.single_observation_space.shape).prod(), 64)),
+            nn.Tanh(),
+            layer_init(nn.Linear(64, 64)),
+            nn.Tanh(),
+            layer_init(nn.Linear(64, 1), std=1.0),)
+           
+        self.actor = nn.Sequential(
+            layer_init(nn.Linear(np.array(envs.single_observation_space.shape).prod(), 64)),
+            nn.Tanh(),
+            layer_init(nn.Linear(64, 64)),
+            nn.Tanh(),
+            layer_init(nn.Linear(64, envs.single_action_space.n), std=0.01),) ##0.01 ensured such that the output is not too large and has similar valuesw
+
+        
+
+        
+
+##Layer Initialization-step-0.2
+def layer_init(layer, std=np.sqrt(2), bias_const=0.0):
+    torch.nn.init.orthogonal_(layer.weight,std) ##ppo uses orthogonal initialization
+    torch.nn.init.constant_(layer.bias, bias_const)## and uses constant bias initialization
+    return layer
+    
+
 def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('--exp-name',
@@ -60,17 +97,17 @@ if __name__ == "__main__":
     args = parse_args()
     #print(args)
     run_name = f"{args.gym_id}__{args.exp_name}__{args.seed}__{int(time.time())}"
-    if args.track:
-        import wandb
-        wandb.init(
-            project=args.wandb_project_name,
-            entity=args.wandb_entity,
-            sync_tensorboard=True,
-            config=vars(args),
-            name=run_name,
-            monitor_gym=True,
-            save_code=True,
-        )
+    # if args.track:
+    #     import wandb
+    #     wandb.init(
+    #         project=args.wandb_project_name,
+    #         entity=args.wandb_entity,
+    #         sync_tensorboard=True,
+    #         config=vars(args),
+    #         name=run_name,
+    #         monitor_gym=True,
+    #         save_code=True,
+    #     )
     log_dir = f"runs/{run_name}"
     writer = SummaryWriter(log_dir)
     writer.add_text(
@@ -81,10 +118,10 @@ if __name__ == "__main__":
     for i in range(100):
         writer.add_scalar("test_loss", i * 2, global_step=i)
 
-    try:
-        subprocess.Popen(["tensorboard", "--logdir", log_dir])
-    except FileNotFoundError:
-        print("TensorBoard not found. Make sure it is installed and added to your PATH.")
+    # try:
+    #     subprocess.Popen(["tensorboard", "--logdir", log_dir])
+    # except FileNotFoundError:
+    #     print("TensorBoard not found. Make sure it is installed and added to your PATH.")
 
     
     ##seeding
@@ -124,3 +161,12 @@ if __name__ == "__main__":
     assert isinstance(envs.single_action_space, gym.spaces.Discrete), "Only discrete action space is supported"
     print("envs.single_action_space", envs.single_action_space.n)
     print("envs.single_observation_space", envs.single_observation_space.shape)
+
+    ##envs.single_action_space 2 -  left and right
+    ##envs.single_observation_space (4,) - cart position, cart velocity, pole angle, pole angular velocity
+
+    
+
+    ##creating instance of agent
+    agent = Agent(envs).to(device)
+    print(agent)
