@@ -1,0 +1,24 @@
+2025-01-18 15:58:37,534 INFO    MainThread:4396 [wandb_setup.py:_flush():68] Current SDK version is 0.19.4
+2025-01-18 15:58:37,534 INFO    MainThread:4396 [wandb_setup.py:_flush():68] Configure stats pid to 4396
+2025-01-18 15:58:37,534 INFO    MainThread:4396 [wandb_setup.py:_flush():68] Loading settings from /Users/sriramsohan/.config/wandb/settings
+2025-01-18 15:58:37,534 INFO    MainThread:4396 [wandb_setup.py:_flush():68] Loading settings from /Users/sriramsohan/Documents/projects/Reinforcement_Learning/Lunar_Lander_PPO/wandb/settings
+2025-01-18 15:58:37,535 INFO    MainThread:4396 [wandb_setup.py:_flush():68] Loading settings from environment variables
+2025-01-18 15:58:37,535 INFO    MainThread:4396 [wandb_init.py:setup_run_log_directory():624] Logging user logs to /Users/sriramsohan/Documents/projects/Reinforcement_Learning/Lunar_Lander_PPO/wandb/run-20250118_155837-pjkfsoys/logs/debug.log
+2025-01-18 15:58:37,535 INFO    MainThread:4396 [wandb_init.py:setup_run_log_directory():625] Logging internal logs to /Users/sriramsohan/Documents/projects/Reinforcement_Learning/Lunar_Lander_PPO/wandb/run-20250118_155837-pjkfsoys/logs/debug-internal.log
+2025-01-18 15:58:37,559 INFO    MainThread:4396 [wandb_init.py:init():743] calling init triggers
+2025-01-18 15:58:37,559 INFO    MainThread:4396 [wandb_init.py:init():748] wandb.init called with sweep_config: {}
+config: {'exp_name': 'ppo', 'gym_id': 'CartPole-v2', 'learning_rate': 0.00025, 'seed': 1, 'total_timesteps': 25000, 'torch_deterministic': True, 'cuda': True, 'track': True, 'wandb_project_name': 'cleanRL', 'wandb_entity': None}
+2025-01-18 15:58:37,559 INFO    MainThread:4396 [wandb_init.py:init():776] starting backend
+2025-01-18 15:58:37,777 INFO    MainThread:4396 [wandb_init.py:init():780] sending inform_init request
+2025-01-18 15:58:37,802 INFO    MainThread:4396 [backend.py:_multiprocessing_setup():97] multiprocessing start_methods=spawn,fork,forkserver, using: spawn
+2025-01-18 15:58:37,802 INFO    MainThread:4396 [wandb_init.py:init():795] backend started and connected
+2025-01-18 15:58:37,803 INFO    MainThread:4396 [wandb_init.py:init():888] updated telemetry
+2025-01-18 15:58:37,814 INFO    MainThread:4396 [wandb_init.py:init():915] communicating run to backend with 90.0 second timeout
+2025-01-18 15:58:38,057 INFO    MainThread:4396 [wandb_init.py:init():967] starting run threads in backend
+2025-01-18 15:58:38,101 INFO    MainThread:4396 [wandb_run.py:_console_start():2409] atexit reg
+2025-01-18 15:58:38,101 INFO    MainThread:4396 [wandb_run.py:_redirect():2259] redirect: wrap_raw
+2025-01-18 15:58:38,101 INFO    MainThread:4396 [wandb_run.py:_redirect():2324] Wrapping output streams.
+2025-01-18 15:58:38,101 INFO    MainThread:4396 [wandb_run.py:_redirect():2349] Redirects installed.
+2025-01-18 15:58:38,103 INFO    MainThread:4396 [wandb_init.py:init():1009] run started, returning control to user process
+2025-01-18 15:58:38,103 INFO    MainThread:4396 [wandb_run.py:_tensorboard_callback():1464] tensorboard callback: runs/CartPole-v2__ppo__1__1737233917, True
+2025-01-18 15:58:38,117 WARNING MsgRouterThr:4396 [router.py:message_loop():75] message_loop has been closed

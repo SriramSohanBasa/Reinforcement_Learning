@@ -1,0 +1,11 @@
+{"time":"2025-01-18T15:58:37.804423-05:00","level":"INFO","msg":"stream: starting","core version":"0.19.4","symlink path":"/Users/sriramsohan/Documents/projects/Reinforcement_Learning/Lunar_Lander_PPO/wandb/run-20250118_155837-pjkfsoys/logs/debug-core.log"}
+{"time":"2025-01-18T15:58:37.912171-05:00","level":"INFO","msg":"created new stream","id":"pjkfsoys"}
+{"time":"2025-01-18T15:58:37.912213-05:00","level":"INFO","msg":"stream: started","id":"pjkfsoys"}
+{"time":"2025-01-18T15:58:37.912234-05:00","level":"INFO","msg":"handler: started","stream_id":"pjkfsoys"}
+{"time":"2025-01-18T15:58:37.912407-05:00","level":"INFO","msg":"sender: started","stream_id":"pjkfsoys"}
+{"time":"2025-01-18T15:58:37.912567-05:00","level":"INFO","msg":"writer: Do: started","stream_id":"pjkfsoys"}
+{"time":"2025-01-18T15:58:38.060516-05:00","level":"INFO","msg":"Starting system monitor"}
+{"time":"2025-01-18T15:58:38.061329-05:00","level":"ERROR","msg":"git repo not found","error":"repository does not exist"}
+{"time":"2025-01-18T15:58:38.117069-05:00","level":"INFO","msg":"stream: closing","id":"pjkfsoys"}
+{"time":"2025-01-18T15:58:38.117256-05:00","level":"INFO","msg":"Stopping system monitor"}
+{"time":"2025-01-18T15:58:38.117627-05:00","level":"INFO","msg":"Stopped system monitor"}

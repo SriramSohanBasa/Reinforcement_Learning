@@ -1,0 +1,4 @@
+Traceback (most recent call last):
+  File "/Users/sriramsohan/Documents/projects/Reinforcement_Learning/Lunar_Lander_PPO/ppo.py", line 97, in <module>
+    env = gym.make("CartPole-v1") ##init the env
+NameError: name 'gym' is not defined

@@ -1,0 +1,19 @@
+{
+  "os":  "macOS-15.2-arm64-arm-64bit",
+  "python":  "CPython 3.10.12",
+  "startedAt":  "2025-01-18T20:49:47.222799Z",
+  "args":  [
+    "--track"
+  ],
+  "program":  "/Users/sriramsohan/Documents/projects/Reinforcement_Learning/Lunar_Lander_PPO/ppo.py",
+  "codePath":  "Lunar_Lander_PPO/ppo.py",
+  "git":  {
+    "remote":  "git@github.com:SriramSohanBasa/Reinforcement_Learning.git",
+    "commit":  "59dc4623db8ceedd7b9f41454809374f79d3b8a7"
+  },
+  "email":  "basa.s@northeastern.edu",
+  "root":  "/Users/sriramsohan/Documents/projects/Reinforcement_Learning/Lunar_Lander_PPO",
+  "host":  "Srirams-MacBook-Pro.local",
+  "executable":  "/Users/sriramsohan/miniforge3/envs/Unity_Agents_env/bin/python",
+  "codePathLocal":  "ppo.py"
+}
