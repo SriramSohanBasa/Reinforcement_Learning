@@ -12,6 +12,8 @@ import torch.optim as optim
 from torch.distributions.categorical import Categorical
 from torch.utils.tensorboard import SummaryWriter
 
+import cv2  # for video creation
+
 
 def parse_args():
     # fmt: off
@@ -37,7 +39,7 @@ def parse_args():
     parser.add_argument("--wandb-entity", type=str, default=None,
         help="the entity (team) of wandb's project")
     parser.add_argument("--capture-video", type=lambda x: bool(strtobool(x)), default=False, nargs="?", const=True,
-        help="weather to capture videos of the agent performances (check out `videos` folder)")
+        help="whether to capture ALL frames into one final video (warning: large memory usage)")
 
     # Algorithm specific arguments
     parser.add_argument("--num-envs", type=int, default=4,
@@ -77,18 +79,18 @@ def parse_args():
     return args
 
 
-def make_env(gym_id, seed, idx, capture_video, run_name):
+def make_env(gym_id, seed, idx):
+    """
+    Creates a single environment with the specified gym_id, seed, and index.
+    Note: We're removing RecordVideo so we can manually capture frames into one final video.
+    """
     def thunk():
         env = gym.make(gym_id)
-        env = gym.wrappers.RecordEpisodeStatistics(env)
-        if capture_video:
-            if idx == 0:
-                env = gym.wrappers.RecordVideo(env, f"videos/{run_name}")
+        env = gym.wrappers.RecordEpisodeStatistics(env)  # For episodic returns
         env.seed(seed)
         env.action_space.seed(seed)
         env.observation_space.seed(seed)
         return env
-
     return thunk
 
 
@@ -130,9 +132,9 @@ class Agent(nn.Module):
 if __name__ == "__main__":
     args = parse_args()
     run_name = f"{args.gym_id}__{args.exp_name}__{args.seed}__{int(time.time())}"
+
     if args.track:
         import wandb
-
         wandb.init(
             project=args.wandb_project_name,
             entity=args.wandb_entity,
@@ -142,10 +144,13 @@ if __name__ == "__main__":
             monitor_gym=True,
             save_code=True,
         )
+
     writer = SummaryWriter(f"runs/{run_name}")
     writer.add_text(
         "hyperparameters",
-        "|param|value|\n|-|-|\n%s" % ("\n".join([f"|{key}|{value}|" for key, value in vars(args).items()])),
+        "|param|value|\n|-|-|\n%s" % (
+            "\n".join([f"|{key}|{value}|" for key, value in vars(args).items()])
+        ),
     )
 
     # TRY NOT TO MODIFY: seeding
@@ -158,7 +163,7 @@ if __name__ == "__main__":
 
     # env setup
     envs = gym.vector.SyncVectorEnv(
-        [make_env(args.gym_id, args.seed + i, i, args.capture_video, run_name) for i in range(args.num_envs)]
+        [make_env(args.gym_id, args.seed + i, i) for i in range(args.num_envs)]
     )
     assert isinstance(envs.single_action_space, gym.spaces.Discrete), "only discrete action space is supported"
 
@@ -172,6 +177,9 @@ if __name__ == "__main__":
     rewards = torch.zeros((args.num_steps, args.num_envs)).to(device)
     dones = torch.zeros((args.num_steps, args.num_envs)).to(device)
     values = torch.zeros((args.num_steps, args.num_envs)).to(device)
+
+    # For capturing frames (only if --capture-video is set)
+    frames = []
 
     # TRY NOT TO MODIFY: start the game
     global_step = 0
@@ -199,10 +207,16 @@ if __name__ == "__main__":
             actions[step] = action
             logprobs[step] = logprob
 
-            # TRY NOT TO MODIFY: execute the game and log data.
-            next_obs, reward, done, info = envs.step(action.cpu().numpy())
+            # Execute the game and log data
+            next_obs_np, reward, done, info = envs.step(action.cpu().numpy())
             rewards[step] = torch.tensor(reward).to(device).view(-1)
-            next_obs, next_done = torch.Tensor(next_obs).to(device), torch.Tensor(done).to(device)
+            next_obs, next_done = torch.Tensor(next_obs_np).to(device), torch.Tensor(done).to(device)
+
+            # Capture the frame from the first environment (index 0) if requested
+            if args.capture_video:
+                # Note: Some vectorized envs won't render all sub-envs. We'll pick index 0 for demonstration
+                frame = envs.envs[0].render(mode="rgb_array")
+                frames.append(frame)
 
             for item in info:
                 if "episode" in item.keys():
@@ -211,7 +225,7 @@ if __name__ == "__main__":
                     writer.add_scalar("charts/episodic_length", item["episode"]["l"], global_step)
                     break
 
-        # bootstrap value if not done
+        # Bootstrap value if not done
         with torch.no_grad():
             next_value = agent.get_value(next_obs).reshape(1, -1)
             if args.gae:
@@ -239,7 +253,7 @@ if __name__ == "__main__":
                     returns[t] = rewards[t] + args.gamma * nextnonterminal * next_return
                 advantages = returns - values
 
-        # flatten the batch
+        # Flatten the batch
         b_obs = obs.reshape((-1,) + envs.single_observation_space.shape)
         b_logprobs = logprobs.reshape(-1)
         b_actions = actions.reshape((-1,) + envs.single_action_space.shape)
@@ -256,7 +270,9 @@ if __name__ == "__main__":
                 end = start + args.minibatch_size
                 mb_inds = b_inds[start:end]
 
-                _, newlogprob, entropy, newvalue = agent.get_action_and_value(b_obs[mb_inds], b_actions.long()[mb_inds])
+                _, newlogprob, entropy, newvalue = agent.get_action_and_value(
+                    b_obs[mb_inds], b_actions.long()[mb_inds]
+                )
                 logratio = newlogprob - b_logprobs[mb_inds]
                 ratio = logratio.exp()
 
@@ -306,7 +322,7 @@ if __name__ == "__main__":
         var_y = np.var(y_true)
         explained_var = np.nan if var_y == 0 else 1 - np.var(y_true - y_pred) / var_y
 
-        # TRY NOT TO MODIFY: record rewards for plotting purposes
+        # TRY NOT TO MODIFY: record metrics
         writer.add_scalar("charts/learning_rate", optimizer.param_groups[0]["lr"], global_step)
         writer.add_scalar("losses/value_loss", v_loss.item(), global_step)
         writer.add_scalar("losses/policy_loss", pg_loss.item(), global_step)
@@ -315,8 +331,32 @@ if __name__ == "__main__":
         writer.add_scalar("losses/approx_kl", approx_kl.item(), global_step)
         writer.add_scalar("losses/clipfrac", np.mean(clipfracs), global_step)
         writer.add_scalar("losses/explained_variance", explained_var, global_step)
-        print("SPS:", int(global_step / (time.time() - start_time)))
-        writer.add_scalar("charts/SPS", int(global_step / (time.time() - start_time)), global_step)
+        sps = int(global_step / (time.time() - start_time))
+        print(f"SPS: {sps}")
+        writer.add_scalar("charts/SPS", sps, global_step)
 
     envs.close()
     writer.close()
+
+    # If we recorded frames, combine them into a single video
+    if args.capture_video and len(frames) > 0:
+        os.makedirs("videos", exist_ok=True)
+        video_path = f"videos/{run_name}_training.mp4"
+
+        # Get frame size from the first frame
+        height, width, _ = frames[0].shape
+        out = cv2.VideoWriter(
+            video_path,
+            cv2.VideoWriter_fourcc(*'mp4v'),
+            30,  # FPS
+            (width, height)
+        )
+
+        print(f"Saving {len(frames)} frames to {video_path}...")
+        for frame in frames:
+            # Convert RGB (gym output) to BGR (OpenCV)
+            frame_bgr = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)
+            out.write(frame_bgr)
+
+        out.release()
+        print(f"Video saved at: {video_path}")
