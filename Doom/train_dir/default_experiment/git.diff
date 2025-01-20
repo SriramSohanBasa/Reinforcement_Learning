@@ -1,0 +1,127 @@
+diff --git a/.DS_Store b/.DS_Store
+index 8991aa4..dc8382a 100644
+Binary files a/.DS_Store and b/.DS_Store differ
+diff --git a/FrozenLake/FrozenLake-v1.ipynb b/FrozenLake/FrozenLake-v1.ipynb
+index 8791860..661433c 100644
+--- a/FrozenLake/FrozenLake-v1.ipynb
++++ b/FrozenLake/FrozenLake-v1.ipynb
+@@ -577,18 +577,6 @@
+         "As [explained in the documentation](https://gymnasium.farama.org/api/env/#gymnasium.Env.render) “rgb_array”: Return a single frame representing the current state of the environment. A frame is a np.ndarray with shape (x, y, 3) representing RGB values for an x-by-y pixel image."
+       ]
+     },
+-    {
+-      "cell_type": "code",
+-      "execution_count": 6,
+-      "metadata": {
+-        "id": "IzJnb8O3y8up"
+-      },
+-      "outputs": [],
+-      "source": [
+-        "# Create the FrozenLake-v1 environment using 4x4 map and non-slippery version and render_mode=\"rgb_array\"\n",
+-        "env = gym.make(\"FrozenLake-v1\", map_name=\"4x4\", is_slippery= False, render_mode= \"rgb_array\") # TODO use the correct parameters"
+-      ]
+-    },
+     {
+       "cell_type": "markdown",
+       "metadata": {
+diff --git a/Lunar_Lander_PPO/Lunar_Lander-v1.ipynb b/Lunar_Lander_PPO/Lunar_Lander-v1.ipynb
+index 4047e46..1e93237 100644
+--- a/Lunar_Lander_PPO/Lunar_Lander-v1.ipynb
++++ b/Lunar_Lander_PPO/Lunar_Lander-v1.ipynb
+@@ -14,7 +14,7 @@
+         "\n",
+         "To test its robustness, we're going to train it in:\n",
+         "\n",
+-        "- [LunarLander-v2 🚀](https://www.gymlibrary.dev/environments/box2d/lunar_lander/)\n"
++        "- [CartPole-v1 🚀](https://www.gymlibrary.dev/environments/box2d/lunar_lander/)\n"
+       ]
+     },
+     {
+@@ -48,7 +48,7 @@
+       ],
+       "source": [
+         "%%html\n",
+-        "<video controls autoplay><source src=\"https://huggingface.co/sb3/ppo-LunarLander-v2/resolve/main/replay.mp4\" type=\"video/mp4\"></video>"
++        "<video controls autoplay><source src=\"https://huggingface.co/sb3/ppo-CartPole-v1/resolve/main/replay.mp4\" type=\"video/mp4\"></video>"
+       ]
+     },
+     {
+@@ -1405,7 +1405,7 @@
+       },
+       "outputs": [],
+       "source": [
+-        "!python ppo.py --env-id=\"LunarLander-v2\" --repo-id=\"YOUR_REPO_ID\" --total-timesteps=50000"
++        "!python ppo.py --env-id=\"CartPole-v1\" --repo-id=\"YOUR_REPO_ID\" --total-timesteps=50000"
+       ]
+     },
+     {
+diff --git a/Lunar_Lander_PPO/runs/.DS_Store b/Lunar_Lander_PPO/runs/.DS_Store
+index e8d1b01..79532fb 100644
+Binary files a/Lunar_Lander_PPO/runs/.DS_Store and b/Lunar_Lander_PPO/runs/.DS_Store differ
+diff --git a/Lunar_Lander_PPO/runs/CartPole-v1__ppo__1__1737235011/events.out.tfevents.1737235011.Srirams-MacBook-Pro.local.5067.0 b/Lunar_Lander_PPO/runs/CartPole-v1__ppo__1__1737235011/events.out.tfevents.1737235011.Srirams-MacBook-Pro.local.5067.0
+deleted file mode 100644
+index 5e8d5a0..0000000
+Binary files a/Lunar_Lander_PPO/runs/CartPole-v1__ppo__1__1737235011/events.out.tfevents.1737235011.Srirams-MacBook-Pro.local.5067.0 and /dev/null differ
+diff --git a/Lunar_Lander_PPO/runs/CartPole-v1__ppo__1__1737235153/events.out.tfevents.1737235153.Srirams-MacBook-Pro.local.5152.0 b/Lunar_Lander_PPO/runs/CartPole-v1__ppo__1__1737235153/events.out.tfevents.1737235153.Srirams-MacBook-Pro.local.5152.0
+deleted file mode 100644
+index 5694707..0000000
+Binary files a/Lunar_Lander_PPO/runs/CartPole-v1__ppo__1__1737235153/events.out.tfevents.1737235153.Srirams-MacBook-Pro.local.5152.0 and /dev/null differ
+diff --git a/Lunar_Lander_PPO/runs/CartPole-v1__ppo__1__1737235255/events.out.tfevents.1737235255.Srirams-MacBook-Pro.local.5211.0 b/Lunar_Lander_PPO/runs/CartPole-v1__ppo__1__1737235255/events.out.tfevents.1737235255.Srirams-MacBook-Pro.local.5211.0
+deleted file mode 100644
+index 24d0554..0000000
+Binary files a/Lunar_Lander_PPO/runs/CartPole-v1__ppo__1__1737235255/events.out.tfevents.1737235255.Srirams-MacBook-Pro.local.5211.0 and /dev/null differ
+diff --git a/Lunar_Lander_PPO/runs/CartPole-v1__ppo__1__1737235327/events.out.tfevents.1737235327.Srirams-MacBook-Pro.local.5255.0 b/Lunar_Lander_PPO/runs/CartPole-v1__ppo__1__1737235327/events.out.tfevents.1737235327.Srirams-MacBook-Pro.local.5255.0
+deleted file mode 100644
+index b6b8901..0000000
+Binary files a/Lunar_Lander_PPO/runs/CartPole-v1__ppo__1__1737235327/events.out.tfevents.1737235327.Srirams-MacBook-Pro.local.5255.0 and /dev/null differ
+diff --git a/Lunar_Lander_PPO/runs/CartPole-v2__ppo__1__1737234408/events.out.tfevents.1737234408.Srirams-MacBook-Pro.local.4862.0 b/Lunar_Lander_PPO/runs/CartPole-v2__ppo__1__1737234408/events.out.tfevents.1737234408.Srirams-MacBook-Pro.local.4862.0
+deleted file mode 100644
+index 1f40796..0000000
+Binary files a/Lunar_Lander_PPO/runs/CartPole-v2__ppo__1__1737234408/events.out.tfevents.1737234408.Srirams-MacBook-Pro.local.4862.0 and /dev/null differ
+diff --git a/Lunar_Lander_PPO/runs/CartPole-v2__ppo__1__1737234514/events.out.tfevents.1737234514.Srirams-MacBook-Pro.local.4921.0 b/Lunar_Lander_PPO/runs/CartPole-v2__ppo__1__1737234514/events.out.tfevents.1737234514.Srirams-MacBook-Pro.local.4921.0
+deleted file mode 100644
+index 7441d08..0000000
+Binary files a/Lunar_Lander_PPO/runs/CartPole-v2__ppo__1__1737234514/events.out.tfevents.1737234514.Srirams-MacBook-Pro.local.4921.0 and /dev/null differ
+diff --git a/Lunar_Lander_PPO/runs/CartPole-v2__ppo__1__1737234844/events.out.tfevents.1737234844.Srirams-MacBook-Pro.local.5007.0 b/Lunar_Lander_PPO/runs/CartPole-v2__ppo__1__1737234844/events.out.tfevents.1737234844.Srirams-MacBook-Pro.local.5007.0
+deleted file mode 100644
+index 8c2f29e..0000000
+Binary files a/Lunar_Lander_PPO/runs/CartPole-v2__ppo__1__1737234844/events.out.tfevents.1737234844.Srirams-MacBook-Pro.local.5007.0 and /dev/null differ
+diff --git a/Lunar_Lander_PPO/videos/cartpole-episode-0.meta.json b/Lunar_Lander_PPO/videos/cartpole-episode-0.meta.json
+deleted file mode 100644
+index 7da9acd..0000000
+--- a/Lunar_Lander_PPO/videos/cartpole-episode-0.meta.json
++++ /dev/null
+@@ -1 +0,0 @@
+-{"step_id": 0, "episode_id": 0, "content_type": "video/mp4", "encoder_version": {"backend": "ffmpeg", "version": "b\"ffmpeg version 7.1 Copyright (c) 2000-2024 the FFmpeg developers\\nbuilt with Apple clang version 16.0.0 (clang-1600.0.26.4)\\nconfiguration: --prefix=/opt/homebrew/Cellar/ffmpeg/7.1_4 --enable-shared --enable-pthreads --enable-version3 --cc=clang --host-cflags= --host-ldflags='-Wl,-ld_classic' --enable-ffplay --enable-gnutls --enable-gpl --enable-libaom --enable-libaribb24 --enable-libbluray --enable-libdav1d --enable-libharfbuzz --enable-libjxl --enable-libmp3lame --enable-libopus --enable-librav1e --enable-librist --enable-librubberband --enable-libsnappy --enable-libsrt --enable-libssh --enable-libsvtav1 --enable-libtesseract --enable-libtheora --enable-libvidstab --enable-libvmaf --enable-libvorbis --enable-libvpx --enable-libwebp --enable-libx264 --enable-libx265 --enable-libxml2 --enable-libxvid --enable-lzma --enable-libfontconfig --enable-libfreetype --enable-frei0r --enable-libass --enable-libopencore-amrnb --enable-libopencore-amrwb --enable-libopenjpeg --enable-libspeex --enable-libsoxr --enable-libzmq --enable-libzimg --disable-libjack --disable-indev=jack --enable-videotoolbox --enable-audiotoolbox --enable-neon\\nlibavutil      59. 39.100 / 59. 39.100\\nlibavcodec     61. 19.100 / 61. 19.100\\nlibavformat    61.  7.100 / 61.  7.100\\nlibavdevice    61.  3.100 / 61.  3.100\\nlibavfilter    10.  4.100 / 10.  4.100\\nlibswscale      8.  3.100 /  8.  3.100\\nlibswresample   5.  3.100 /  5.  3.100\\nlibpostproc    58.  3.100 / 58.  3.100\\n\"", "cmdline": ["ffmpeg", "-nostats", "-loglevel", "error", "-y", "-f", "rawvideo", "-s:v", "600x400", "-pix_fmt", "rgb24", "-framerate", "50", "-i", "-", "-vf", "scale=trunc(iw/2)*2:trunc(ih/2)*2", "-vcodec", "libx264", "-pix_fmt", "yuv420p", "-r", "50", "/Users/sriramsohan/Documents/projects/Reinforcement_Learning/Lunar_Lander_PPO/videos/cartpole-episode-0.mp4"]}}
+\ No newline at end of file
+diff --git a/Lunar_Lander_PPO/videos/cartpole-episode-0.mp4 b/Lunar_Lander_PPO/videos/cartpole-episode-0.mp4
+deleted file mode 100644
+index b5abc0b..0000000
+Binary files a/Lunar_Lander_PPO/videos/cartpole-episode-0.mp4 and /dev/null differ
+diff --git a/Lunar_Lander_PPO/wandb/debug-internal.log b/Lunar_Lander_PPO/wandb/debug-internal.log
+index e40a5c7..de3925b 120000
+--- a/Lunar_Lander_PPO/wandb/debug-internal.log
++++ b/Lunar_Lander_PPO/wandb/debug-internal.log
+@@ -1 +1 @@
+-run-20250118_155837-pjkfsoys/logs/debug-internal.log
+\ No newline at end of file
++run-20250119_161447-n7xlama5/logs/debug-internal.log
+\ No newline at end of file
+diff --git a/Lunar_Lander_PPO/wandb/debug.log b/Lunar_Lander_PPO/wandb/debug.log
+index ac13334..56dbc5d 120000
+--- a/Lunar_Lander_PPO/wandb/debug.log
++++ b/Lunar_Lander_PPO/wandb/debug.log
+@@ -1 +1 @@
+-run-20250118_155837-pjkfsoys/logs/debug.log
+\ No newline at end of file
++run-20250119_161447-n7xlama5/logs/debug.log
+\ No newline at end of file
+diff --git a/Lunar_Lander_PPO/wandb/latest-run b/Lunar_Lander_PPO/wandb/latest-run
+index 290041e..7075286 120000
+--- a/Lunar_Lander_PPO/wandb/latest-run
++++ b/Lunar_Lander_PPO/wandb/latest-run
+@@ -1 +1 @@
+-run-20250118_155837-pjkfsoys
+\ No newline at end of file
++run-20250119_161447-n7xlama5
+\ No newline at end of file
